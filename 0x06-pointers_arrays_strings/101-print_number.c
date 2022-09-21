@@ -7,27 +7,15 @@
  */
 void print_number(int n)
 {
-	int tmp;
-	int factor;
+if (n < 0) {
+        putchar('-');
+        n = -n;
+    }
 
-	tmp = n;
-	factor = 1;
-	while (tmp / 10)
-	{
-		tmp = tmp / 10;
-		factor *= 10;
-	}
-	while (factor > 0)
-	{
-		tmp = n / factor;
-		n = n - (tmp * factor);
-		if (tmp < 0)
-		{
-			_putchar('-');
-			tmp = -tmp;
-			n = -n;
-		}
-		_putchar(tmp + '0');
-		factor /= 10;
-	}
+    // Remove the last digit and recur
+    if (n/10)
+        print(n/10);
+
+    // Print the last digit
+    putchar(n%10 + '0');
 }
