@@ -1,87 +1,97 @@
-#include <stdlib.h>
 #include "main.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-int _atoi(char *s);
-int _strlen(char *s);
 /**
- * main - function with two arguments
- * @argc: argument count
- * @argv: argument value
- *
- * Description: program that multiplies two positive numbers
- * Return: value
+ * is_digit - checks if a string contains a non-digit char
+ * @s: string to be evaluated
+ * Return: 0 if a non-digit is found, 1 otherwise
  */
-int main(int argc, char *argv[])
+int is_digit(char *s)
 {
-	int count, len1, len2, temp1, temp2, *array, *result;
+	int i = 0;
 
-	if (argc != 3)
+	while (s[i])
 	{
-		printf("Error\n");
-		exit (98);
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
+		i++;
 	}
-
-	len1 = _strlen(argv[1]);
-	len2 = _strlen(argv[2]);
-	t_len = len1 + len2 - 1;
-
-	array = malloc(sizeof(char) * (len1 + len2 + 1));
-	if (array == NULL)
-		return (NULL);
-
-	len1 -= 1;
-	len2 -= 1;
-	for (count = 1; argv[count] != '\0', count++)
-	{
-		for (; argv[1][len1]; len1--)
-		{
-			temp1 = argv[1][len1 - 1] - '0';;
-		}
-		for (; argv[2][len2]; len2--)
-		{
-			temp2 = argv[2][len2 - 1] - '0';
-		}
-		for (; array[t_len] > 0
-		if ((temp1 * temp2) > 9)
-			array[
-	}
+	return (1);
 }
 
-int _atoi(char *s)
+/**
+ * _strlen - returns the length of a string
+ * @s: string to evaluate
+ * Return: the length of the string
+ */
+int _strlen(char *s)
 {
-	int i, sign, numb;
-
-	i = 0;
-	sign = 1;
-	numb = 0;
+	int i = 0;
 
 	while (s[i] != '\0')
 	{
-		if (s[i] == '-')
-			sign *= -1;
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			while (s[i] >= '0' && s[i] <= '9')
-			{
-				numb = (s[i] - '0') * sign + numb * 10;
-				i++;
-			}
-			break;
-		}
 		i++;
 	}
-	return (numb);
+
+	return (i);
 }
 
-int _strlen(char *s)
+/**
+ * errors - handles errors for main
+ */
+void errors(void)
 {
-	int i;
+	printf("Error\n");
+	exit(98);
+}
 
-	i = 0;
-	while (*(s + i) != '\0')
+/**
+ * main - multiplies two positive numbers
+ * @argc: number of arguments
+ * @argv: array of arguments
+ * Return: always 0 (Success)
+ */
+int main(int argc, char *argv[])
+{
+	char *s1, *s2;
+	int len1, len2, len, i, carry, digit1, digit2, *result, a = 0;
+
+	s1 = argv[1], s2 = argv[2];
+	if (argc != 3 || !is_digit(s1) || !is_digit(s2))
+		errors();
+	len1 = _strlen(s1);
+	len2 = _strlen(s2);
+	len = len1 + len2 + 1;
+	result = malloc(sizeof(int) * len);
+	if (!result)
+		return (1);
+	for (i = 0; i <= len1 + len2; i++)
+		result[i] = 0;
+	for (len1 = len1 - 1; len1 >= 0; len1--)
 	{
-		i++;
+		digit1 = s1[len1] - '0';
+		carry = 0;
+		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
+		{
+			digit2 = s2[len2] - '0';
+			carry += result[len1 + len2 + 1] + (digit1 * digit2);
+			result[len1 + len2 + 1] = carry % 10;
+			carry /= 10;
+		}
+		if (carry > 0)
+			result[len1 + len2 + 1] += carry;
 	}
-	return (i);
+	for (i = 0; i < len - 1; i++)
+	{
+		if (result[i])
+			a = 1;
+		if (a)
+			putchar(result[i] + '0');
+	}
+	if (!a)
+		putchar('0');
+	putchar('\n');
+	free(result);
+	return (0);
 }
